@@ -69,8 +69,6 @@ public class AStarAlgorithm {
                 n.setFunction(n.getCost() + n.getHeuristic());
             }
         }
-
-        System.out.println("Path: " + path.size());
     }
 
     public void reset() {

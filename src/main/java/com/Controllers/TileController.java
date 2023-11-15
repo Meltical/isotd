@@ -3,10 +3,10 @@ package com.Controllers;
 import java.util.function.Consumer;
 
 import com.Constants;
-import com.Models.Empty;
-import com.Models.Road;
-import com.Models.Stone;
-import com.Models.Tile;
+import com.Models.Tiles.Empty;
+import com.Models.Tiles.Road;
+import com.Models.Tiles.Stone;
+import com.Models.Tiles.Tile;
 import com.RouteGenerator.RouteGenerator;
 
 import javafx.geometry.Point2D;

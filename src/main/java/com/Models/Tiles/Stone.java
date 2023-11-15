@@ -1,4 +1,4 @@
-package com.Models;
+package com.Models.Tiles;
 
 import java.io.File;
 
