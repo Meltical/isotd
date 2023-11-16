@@ -1,5 +1,6 @@
 package com.Controllers;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import com.Constants;
@@ -10,47 +11,51 @@ import com.Models.Tiles.Tile;
 import com.RouteGenerator.RouteGenerator;
 
 import javafx.geometry.Point2D;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.util.Pair;
 
 public class TileController {
     private Tile[][] tiles;
     private Tile hoverTile = null;
-    private int width;
-    private int height;
-    private Pane root;
+    private List<Pair<Integer, Integer>> ennemyRoute;
+    private GraphicsRenderer graphicsRenderer;
 
-    public TileController(Pane root, int width, int height) {
-        this.root = root;
-        this.width = width;
-        this.height = height;
-        this.tiles = new Tile[width][height];
+    public TileController(GraphicsRenderer graphicsRenderer) {
+        this.graphicsRenderer = graphicsRenderer;
+        this.tiles = new Tile[Constants.TILE_COUNT_WIDTH][Constants.TILE_COUNT_HEIGHT];
         initTiles();
         onRender();
     }
 
+    public List<Pair<Integer, Integer>> getEnnemyRoute() {
+        return ennemyRoute;
+    }
+
     private void initTiles() {
-        var roadCoords = RouteGenerator.generateRoute(0, 0, width - 1, height - 1);
-        for (var coord : roadCoords) {
+        ennemyRoute = RouteGenerator.generateRoute(0, 0, Constants.TILE_COUNT_WIDTH - 1,
+                Constants.TILE_COUNT_HEIGHT - 1);
+        for (var coord : ennemyRoute) {
             tiles[coord.getKey()][coord.getValue()] = new Road(coord.getKey(), coord.getValue());
             if (coord.getKey() > 0 && tiles[coord.getKey() - 1][coord.getValue()] == null) {
                 tiles[coord.getKey() - 1][coord.getValue()] = new Stone(coord.getKey() - 1, coord.getValue());
             }
-            if (coord.getKey() < width - 1 && tiles[coord.getKey() + 1][coord.getValue()] == null) {
+            if (coord.getKey() < Constants.TILE_COUNT_WIDTH - 1
+                    && tiles[coord.getKey() + 1][coord.getValue()] == null) {
                 tiles[coord.getKey() + 1][coord.getValue()] = new Stone(coord.getKey() + 1, coord.getValue());
             }
             if (coord.getValue() > 0 && tiles[coord.getKey()][coord.getValue() - 1] == null) {
                 tiles[coord.getKey()][coord.getValue() - 1] = new Stone(coord.getKey(), coord.getValue() - 1);
             }
-            if (coord.getValue() < height - 1 && tiles[coord.getKey()][coord.getValue() + 1] == null) {
+            if (coord.getValue() < Constants.TILE_COUNT_HEIGHT - 1
+                    && tiles[coord.getKey()][coord.getValue() + 1] == null) {
                 tiles[coord.getKey()][coord.getValue() + 1] = new Stone(coord.getKey(), coord.getValue() + 1);
             }
         }
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        for (int i = 0; i < Constants.TILE_COUNT_WIDTH; i++) {
+            for (int j = 0; j < Constants.TILE_COUNT_HEIGHT; j++) {
                 if (tiles[i][j] == null) {
                     tiles[i][j] = new Empty(i, j);
                 }
@@ -66,29 +71,16 @@ public class TileController {
         hoverTile = tile;
     }
 
-    private void drawTile(Tile tile) {
-        int originX = (tile.getY() * Constants.TILE_WIDTH / 2) + (tile.getX() * Constants.TILE_WIDTH / 2)
-                + Constants.TILE_WIDTH / 2;
-        int originY = (tile.getX() * Constants.TILE_HEIGHT / 2) - (tile.getY() * Constants.TILE_HEIGHT / 2)
-                + Constants.TILE_HEIGHT * (Constants.TILE_COUNT / 2);
-
-        ImageView sprite = tile.getSprite();
-        sprite.setX(originX);
-        sprite.setY(originY);
-        sprite.setMouseTransparent(true);
-        root.getChildren().add(sprite);
-    }
-
     public void onRender() {
-        for (int i = 0; i < width; i++) {
-            for (int j = height - 1; j >= 0; j--) {
+        for (int i = 0; i < Constants.TILE_COUNT_WIDTH; i++) {
+            for (int j = Constants.TILE_COUNT_HEIGHT - 1; j >= 0; j--) {
                 if (hoverTile != null && hoverTile.getX() == i && hoverTile.getY() == j) {
-                    drawTile(hoverTile);
+                    this.graphicsRenderer.draw(hoverTile);
                     hoverTile = null;
                 } else {
                     if (tiles[i][j] == null)
                         continue;
-                    drawTile(tiles[i][j]);
+                    this.graphicsRenderer.draw(tiles[i][j]);
                 }
             }
         }
@@ -104,13 +96,13 @@ public class TileController {
                     }
                 });
 
-        for (int i = 0; i < width; i++) {
-            for (int j = height - 1; j >= 0; j--) {
+        for (int i = 0; i < Constants.TILE_COUNT_WIDTH; i++) {
+            for (int j = Constants.TILE_COUNT_HEIGHT - 1; j >= 0; j--) {
 
                 int originX = (j * Constants.TILE_WIDTH / 2) + (i * Constants.TILE_WIDTH / 2)
                         + Constants.TILE_WIDTH;
                 int originY = (i * Constants.TILE_HEIGHT / 2) - (j * Constants.TILE_HEIGHT / 2)
-                        + Constants.TILE_HEIGHT * (1 + Constants.TILE_COUNT / 2);
+                        + Constants.TILE_HEIGHT * (1 + Constants.TILE_COUNT_HEIGHT / 2);
 
                 Polygon tile = new Polygon(
                         originX, originY,

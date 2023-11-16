@@ -1,18 +1,26 @@
 package com.Models;
 
 public abstract class APosition {
-    private int x;
-    private int y;
+    private double x;
+    private double y;
 
-    public int getX() {
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public APosition(int x, int y) {
+    public APosition(double x, double y) {
         this.x = x;
         this.y = y;
     }

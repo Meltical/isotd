@@ -83,15 +83,10 @@ public class AStarAlgorithm {
     }
 
     private void retracePath(Node current) {
-        Node temp = current;
         this.path.add(current);
-
-        while (temp.getParent() != null) {
-            this.path.add(temp.getParent());
-            temp = temp.getParent();
+        if (current.getParent() != null) {
+            retracePath(current.getParent());
         }
-
-        this.path.add(start);
     }
 
     private Node getLowestF() {

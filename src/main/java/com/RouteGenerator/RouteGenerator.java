@@ -1,6 +1,7 @@
 package com.RouteGenerator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -8,7 +9,7 @@ import javafx.util.Pair;
 
 public class RouteGenerator {
     public static List<Pair<Integer, Integer>> generateRoute(int startX, int startY, int endX, int endY) {
-        List<Pair<Integer, Integer>> route = new ArrayList<>(List.of(new Pair<>(0, 0)));
+        List<Pair<Integer, Integer>> route = new ArrayList<>();
         Random rand = new Random();
 
         List<Pair<Integer, Integer>> obstacles = new ArrayList<>();
@@ -39,6 +40,7 @@ public class RouteGenerator {
 
         aStar.solve();
         aStar.getPath().forEach(n -> route.add(new Pair<>(((Tile) n).getX(), ((Tile) n).getY())));
+        Collections.reverse(route);
 
         return route;
     }

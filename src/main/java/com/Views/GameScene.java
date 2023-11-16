@@ -13,6 +13,6 @@ public class GameScene extends Scene {
     public GameScene() {
         super(new Pane(), Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
         root = (Pane) getRoot();
-        gameController = new GameController(root, Constants.TILE_COUNT, Constants.TILE_COUNT);
+        gameController = new GameController(root);
     }
 }
