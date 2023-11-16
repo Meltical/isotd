@@ -30,12 +30,6 @@ public class GameController implements Runnable {
 
     @Override
     public void run() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         long lastUpdateTime = System.currentTimeMillis();
         long lastDrawTime = System.currentTimeMillis();
         long updateInterval = 1000 / 8; // update at 8fps
